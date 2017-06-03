@@ -1,6 +1,8 @@
 EarthCoin
 =============
 
+[![Join the chat at https://gitter.im/earthcoinproject/earthcoin](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/earthcoinproject/earthcoin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 EarthCoin is a scrypt based coin with a community that focuses on people, freedom and environmental sustainability.
 
 * http://www.getearthcoin.com/
