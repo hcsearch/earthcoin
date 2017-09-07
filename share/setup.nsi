@@ -5,7 +5,7 @@ SetCompressor /SOLID lzma
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 1.3.4.0
+!define VERSION 1.5.1.0
 !define COMPANY "EarthCoin project"
 !define URL http://www.getearthcoin.com/
 
