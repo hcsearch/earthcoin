@@ -1843,17 +1843,19 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
     if (vDisconnect.size() > 0) {
         printf("REORGANIZE: Disconnect %"PRIszu" blocks; %s..\n", vDisconnect.size(), pfork->GetBlockHash().ToString().c_str());
         printf("REORGANIZE: Connect %"PRIszu" blocks; ..%s\n", vConnect.size(), pindexNew->GetBlockHash().ToString().c_str());
-        // Large reorganize prevention --- never disconect any matured blocks
-        if (vDisconnect.size() >= COINBASE_MATURITY) {
-            return error("SetBestChain() : too many blocks for disconect, reorganization prevented");
-        }
-        // "Travel in time" prevention --- never replace confirmed block by too fresh one
-        if (pindexC->GetBlockTime() > pindexD->GetBlockTime() + 720) {
+        if (pindexD->nHeight > 1589000) {            
+            // Large reorganize prevention --- never disconect any matured blocks
+            if (vDisconnect.size() >= COINBASE_MATURITY) {
+                return error("SetBestChain() : too many blocks for disconect, reorganization prevented");
+            }
+            // "Travel in time" prevention --- never replace confirmed block by too fresh one
+            if (pindexC->GetBlockTime() > pindexD->GetBlockTime() + 720) {
             return error("SetBestChain() : too fresh block, reorganization prevented");
-        }
-        // "Travel in time" prevention --- never replace confirmed block by too old one
-        if (pindexC->GetBlockTime() < pindexD->pprev->GetBlockTime() - 720) {
-            return error("SetBestChain() : too old block, reorganization prevented");
+            }
+            // "Travel in time" prevention --- never replace confirmed block by too old one
+            if (pindexC->GetBlockTime() < pindexD->pprev->GetBlockTime() - 720) {
+                return error("SetBestChain() : too old block, reorganization prevented");
+            }                
         }
     }
 
