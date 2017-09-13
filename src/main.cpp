@@ -1478,6 +1478,8 @@ bool CTransaction::CheckInputs(CValidationState &state, CCoinsViewCache &inputs,
             if (coins.IsCoinBase()) {
                 if (nSpendHeight - coins.nHeight < COINBASE_MATURITY)
                     return state.Invalid(error("CheckInputs() : tried to spend coinbase at depth %d", nSpendHeight - coins.nHeight));
+                if ((coins.nHeight >= 1318446) && (coins.nHeight <= 1573740))   // coins from monopoly mining are invalid
+                    return state.Invalid(error("CheckInputs() : tried to spend coins from unfair mined block %d", coins.nHeight));
             }
 
             // Check for negative or overflow input values
@@ -1827,18 +1829,32 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
 
     // List of what to disconnect (typically nothing)
     vector<CBlockIndex*> vDisconnect;
-    for (CBlockIndex* pindex = view.GetBestBlock(); pindex != pfork; pindex = pindex->pprev)
-        vDisconnect.push_back(pindex);
-
+    CBlockIndex* pindexD;                       // will be needed later --- attack prevention
+    for (pindexD = view.GetBestBlock(); pindexD != pfork; pindexD = pindexD->pprev)
+        vDisconnect.push_back(pindexD);
+    
     // List of what to connect (typically only pindexNew)
     vector<CBlockIndex*> vConnect;
-    for (CBlockIndex* pindex = pindexNew; pindex != pfork; pindex = pindex->pprev)
-        vConnect.push_back(pindex);
+    CBlockIndex* pindexC;                       // will be needed later --- attack prevention
+    for (pindexC = pindexNew; pindexC != pfork; pindexC = pindexC->pprev)
+        vConnect.push_back(pindexC);
     reverse(vConnect.begin(), vConnect.end());
 
     if (vDisconnect.size() > 0) {
         printf("REORGANIZE: Disconnect %"PRIszu" blocks; %s..\n", vDisconnect.size(), pfork->GetBlockHash().ToString().c_str());
         printf("REORGANIZE: Connect %"PRIszu" blocks; ..%s\n", vConnect.size(), pindexNew->GetBlockHash().ToString().c_str());
+        // Large reorganize prevention --- never disconect any matured blocks
+        if (vDisconnect.size() >= COINBASE_MATURITY) {
+            return error("SetBestChain() : too many blocks for disconect, reorganization prevented");
+        }
+        // "Travel in time" prevention --- never replace confirmed block by too fresh one
+        if (pindexC->GetBlockTime() > pindexD->GetBlockTime() + 720) {
+            return error("SetBestChain() : too fresh block, reorganization prevented");
+        }
+        // "Travel in time" prevention --- never replace confirmed block by too old one
+        if (pindexC->GetBlockTime() < pindexD->pprev->GetBlockTime() - 720) {
+            return error("SetBestChain() : too old block, reorganization prevented");
+        }
     }
 
     // Disconnect shorter branch
@@ -2165,7 +2181,7 @@ bool CBlock::CheckBlock(CValidationState &state, bool fCheckPOW, bool fCheckMerk
     }
 
     // Check timestamp
-    if (GetBlockTime() > GetAdjustedTime() + 2 * 60 * 60)
+    if (GetBlockTime() > GetAdjustedTime() + 720)
         return state.Invalid(error("CheckBlock() : block timestamp too far in the future"));
 
     // First transaction must be coinbase, the rest must not be
