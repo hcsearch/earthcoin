@@ -1478,7 +1478,7 @@ bool CTransaction::CheckInputs(CValidationState &state, CCoinsViewCache &inputs,
             if (coins.IsCoinBase()) {
                 if (nSpendHeight - coins.nHeight < COINBASE_MATURITY)
                     return state.Invalid(error("CheckInputs() : tried to spend coinbase at depth %d", nSpendHeight - coins.nHeight));
-                if ((coins.nHeight >= 1318446) && (coins.nHeight <= 1573740))   // coins from monopoly mining are invalid
+                if ((nSpendHeight>1589000) && (coins.nHeight >= 1318446) && (coins.nHeight <= 1573740))   // coins from monopoly mining are invalid
                     return state.Invalid(error("CheckInputs() : tried to spend coins from unfair mined block %d", coins.nHeight));
             }
 
