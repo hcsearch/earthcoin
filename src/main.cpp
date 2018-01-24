@@ -1829,15 +1829,25 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
 
     // List of what to disconnect (typically nothing)
     vector<CBlockIndex*> vDisconnect;
-    CBlockIndex* pindexD;                       // will be needed later --- attack prevention
-    for (pindexD = view.GetBestBlock(); pindexD != pfork; pindexD = pindexD->pprev)
-        vDisconnect.push_back(pindexD);
+    CBlockIndex* pindex = view.GetBestBlock();
+    CBlockIndex* pindexD;      // will be needed later --- attack prevention
+    while (pindex != pfork)
+    {
+        vDisconnect.push_back(pindex);
+        pindexD = pindex; 
+        pindex = pindex->pprev;
+    }
     
     // List of what to connect (typically only pindexNew)
     vector<CBlockIndex*> vConnect;
-    CBlockIndex* pindexC;                       // will be needed later --- attack prevention
-    for (pindexC = pindexNew; pindexC != pfork; pindexC = pindexC->pprev)
-        vConnect.push_back(pindexC);
+    pindex = pindexNew;
+    CBlockIndex* pindexC;     // will be needed later --- attack prevention
+    while (pindex != pfork)
+    {
+        vConnect.push_back(pindex);
+        pindexC = pindex;
+        pindex = pindex->pprev;
+    }
     reverse(vConnect.begin(), vConnect.end());
 
     if (vDisconnect.size() > 0) {
