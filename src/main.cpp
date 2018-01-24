@@ -4168,18 +4168,8 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+#if !defined(WIN32) && !defined(QT_GUI)
+/// mining disabled for Windows wallet to eliminate false positive virus alerts
 //////////////////////////////////////////////////////////////////////////////
 //
 // EarthCoinMiner
@@ -4244,11 +4234,12 @@ public:
             printf("   setDependsOn %s\n", hash.ToString().c_str());
     }
 };
-
+#endif
 
 uint64 nLastBlockTx = 0;
 uint64 nLastBlockSize = 0;
 
+#if !defined(WIN32) && !defined(QT_GUI)
 // We want to sort transactions by priority and fee, so:
 typedef boost::tuple<double, double, CTransaction*> TxPriority;
 class TxPriorityCompare
@@ -4623,6 +4614,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
 
     return true;
 }
+#endif
 
 // Amount compression:
 // * If the amount is 0, output 0
