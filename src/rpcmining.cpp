@@ -70,19 +70,23 @@ static CReserveKey* pMiningKey = NULL;
 
 void InitRPCMining()
 {
+    #if !defined(WIN32) && !defined(QT_GUI)
     if (!pwalletMain)
         return;
 
     // getwork/getblocktemplate mining rewards paid here:
     pMiningKey = new CReserveKey(pwalletMain);
+    #endif    
 }
 
 void ShutdownRPCMining()
 {
+    #if !defined(WIN32) && !defined(QT_GUI)
     if (!pMiningKey)
         return;
 
     delete pMiningKey; pMiningKey = NULL;
+    #endif
 }
 
 Value gethashespersec(const Array& params, bool fHelp)
@@ -123,6 +127,7 @@ Value getmininginfo(const Array& params, bool fHelp)
 
 Value getworkex(const Array& params, bool fHelp)
 {
+    #if !defined(WIN32) && !defined(QT_GUI)   
     if (fHelp || params.size() > 2)
         throw runtime_error(
             "getworkex [data, coinbase]\n"
@@ -218,6 +223,7 @@ Value getworkex(const Array& params, bool fHelp)
         result.push_back(Pair("merkle", merkle_arr));
 
         return result;
+        
     }
     else
     {
@@ -254,11 +260,15 @@ Value getworkex(const Array& params, bool fHelp)
 
         return CheckWork(pblock, *pwalletMain, reservekey);
     }
+    #else
+    throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Mining is dissabled in this build of the EarthCoin wallet!");
+    #endif
 }
 
 
 Value getwork(const Array& params, bool fHelp)
 {
+    #if !defined(WIN32) && !defined(QT_GUI
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "getwork [data]\n"
@@ -368,11 +378,15 @@ Value getwork(const Array& params, bool fHelp)
         assert(pwalletMain != NULL);
         return CheckWork(pblock, *pwalletMain, *pMiningKey);
     }
+    #else
+    throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Mining is dissabled in this build of the EarthCoin wallet!");
+    #endif
 }
 
 
 Value getblocktemplate(const Array& params, bool fHelp)
 {
+    #if !defined(WIN32) && !defined(QT_GUI
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "getblocktemplate [params]\n"
@@ -517,6 +531,10 @@ Value getblocktemplate(const Array& params, bool fHelp)
     result.push_back(Pair("height", (int64_t)(pindexPrev->nHeight+1)));
 
     return result;
+    #else
+    throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Mining is dissabled in this build of the EarthCoin wallet!");
+    #endif
+
 }
 
 Value submitblock(const Array& params, bool fHelp)
