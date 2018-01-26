@@ -4178,7 +4178,7 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
 }
 
 
-#if !defined(WIN32) && !defined(QT_GUI)
+#if !defined(WIN32) || !defined(QT_GUI)
 /// mining disabled for Windows wallet to eliminate false positive virus alerts
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -4249,7 +4249,7 @@ public:
 uint64 nLastBlockTx = 0;
 uint64 nLastBlockSize = 0;
 
-#if !defined(WIN32) && !defined(QT_GUI)
+#if !defined(WIN32) || !defined(QT_GUI)
 // We want to sort transactions by priority and fee, so:
 typedef boost::tuple<double, double, CTransaction*> TxPriority;
 class TxPriorityCompare
