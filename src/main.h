@@ -164,8 +164,8 @@ bool ProcessMessages(CNode* pfrom);
 bool SendMessages(CNode* pto, bool fSendTrickle);
 /** Run an instance of the script checking thread */
 void ThreadScriptCheck();
-#if !defined(WIN32) && !defined(QT_GUI)
-// Enable mining only for non-windows wallet, eliminate false positive virus alerts
+#if !defined(WIN32) || !defined(QT_GUI)
+// Enable mining only for non-windows gui wallet, eliminate false positive virus alerts
 /** Generate a new block, without valid proof-of-work */
 CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn);
 CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey);

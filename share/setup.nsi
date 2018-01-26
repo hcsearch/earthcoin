@@ -7,7 +7,7 @@ SetCompressor /SOLID lzma
 !define REGKEY "SOFTWARE\$(^Name)"
 !define VERSION 1.5.3.0
 !define COMPANY "EarthCoin project"
-!define URL http://www.getearthcoin.com/
+!define URL http://www.newearthcoin.com/
 
 # MUI Symbol Definitions
 !define MUI_ICON "../share/pixmaps/bitcoin.ico"
