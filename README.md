@@ -1,13 +1,12 @@
 EarthCoin
 =============
 
-[![Join the chat at https://gitter.im/earthcoinproject/earthcoin](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/earthcoinproject/earthcoin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 EarthCoin is a scrypt based coin with a community that focuses on people, freedom and environmental sustainability.
 
-* http://www.getearthcoin.com/
-* https://earthcointalk.org/
-* https://bitcointalk.org/index.php?topic=379236.0
+* http://www.newearthcoin.com/  (new website, under construction)
+* http://t.me/earthcoin_io  (telegram group)
+* https://bitcointalk.org/index.php?topic=2161853.0
+* https://bitcointalk.org/index.php?topic=379236.0  (old thread - prior 9/2017 hardfork)
 
 People, Freedom and Foresight.
 ----------------
@@ -75,7 +74,7 @@ EarthCoin is released under the terms of the MIT license. See `COPYING` for more
 information or see http://opensource.org/licenses/MIT.
 
 For more information, as well as an immediately useable, binary version of
-the EarthCoin client sofware, see http://www.getearthcoin.com/.
+the EarthCoin client sofware, see http://www.newearthcoin.com/.
 
 Cryptocurrency
 ----------------
