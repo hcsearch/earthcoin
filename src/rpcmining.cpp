@@ -70,7 +70,7 @@ static CReserveKey* pMiningKey = NULL;
 
 void InitRPCMining()
 {
-    #if !defined(WIN32) && !defined(QT_GUI)
+    #if !defined(WIN32) || !defined(QT_GUI)
     if (!pwalletMain)
         return;
 
@@ -81,7 +81,7 @@ void InitRPCMining()
 
 void ShutdownRPCMining()
 {
-    #if !defined(WIN32) && !defined(QT_GUI)
+    #if !defined(WIN32) || !defined(QT_GUI)
     if (!pMiningKey)
         return;
 
@@ -127,7 +127,7 @@ Value getmininginfo(const Array& params, bool fHelp)
 
 Value getworkex(const Array& params, bool fHelp)
 {
-    #if !defined(WIN32) && !defined(QT_GUI)   
+    #if !defined(WIN32) || !defined(QT_GUI)   
     if (fHelp || params.size() > 2)
         throw runtime_error(
             "getworkex [data, coinbase]\n"
@@ -268,7 +268,7 @@ Value getworkex(const Array& params, bool fHelp)
 
 Value getwork(const Array& params, bool fHelp)
 {
-    #if !defined(WIN32) && !defined(QT_GUI)
+    #if !defined(WIN32) || !defined(QT_GUI)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "getwork [data]\n"
@@ -386,7 +386,7 @@ Value getwork(const Array& params, bool fHelp)
 
 Value getblocktemplate(const Array& params, bool fHelp)
 {
-    #if !defined(WIN32) && !defined(QT_GUI)
+    #if !defined(WIN32) || !defined(QT_GUI)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "getblocktemplate [params]\n"
