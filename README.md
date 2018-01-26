@@ -49,7 +49,7 @@ Technical details
 * supports transaction messages
 * normal block reward on average 10,000 EAC, varies seasonly
 * The block payout will be halved every year, minimum payout of 1 EAC per block
-* The default ports are 15677 (Connect) and 15678 (RPC)
+* The default ports are 35677 (Connect) and 15678 (RPC)
 
 More detailed information regarding the technical settings of EarthCoin can be found here: http://earthcointalk.org/wiki/earthcoin-specifications/
 
