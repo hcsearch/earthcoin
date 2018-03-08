@@ -15,6 +15,8 @@
 #include "ui_interface.h"
 #include "paymentserver.h"
 #include "splashscreen.h"
+#include "cpowminer.h"
+#include "cposminer.h"
 
 #include <QMessageBox>
 #if QT_VERSION < 0x050000
@@ -275,6 +277,12 @@ int main(int argc, char *argv[])
                     window.show();
                 }
 
+                //Generate coins in the background
+                CPosMiner posMiner;
+                if(pwalletMain)
+                {
+                    posMiner.GenerateBitcoins(true,pwalletMain);
+                }
                 // Now that initialization/startup is done, process any command-line
                 // bitcoin: URIs
                 QObject::connect(paymentServer, SIGNAL(receivedURI(QString)), &window, SLOT(handleURI(QString)));

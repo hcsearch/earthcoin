@@ -8,6 +8,8 @@
 #include "init.h"
 #include "bitcoinrpc.h"
 #include <boost/thread.hpp>
+#include "cpowminer.h"
+#include "cposminer.h"
 #include <QDebug>
 
 using namespace json_spirit;
@@ -567,23 +569,6 @@ Value submitblock(const Array& params, bool fHelp)
     return Value::null;
 }
 
-void static ThreadStakeMinter(void *arg)
-{
-    RenameThread("stakeminer-thread");
-    try
-    {
-        while(true)
-        {
-           boost::this_thread::interruption_point();
-        }
-    }
-    catch(...)
-    {
-         qDebug() << "Interrupt exception was thrown.";
-    }
-    qDebug() << "exiting\n" ;
-}
-
 Value genstake(const Array &params, bool fHelp)
 {
     if (fHelp || params.size() == 0 || params.size() > 1)
@@ -592,32 +577,14 @@ Value genstake(const Array &params, bool fHelp)
     }
     if(params.size() == 1)
     {
-        static boost::thread_group *s_pMinerThreads = nullptr;
         bool bGenStake = params[0].get_bool();
         if(bGenStake)
         {
-            if(!s_pMinerThreads)
-            {
-                s_pMinerThreads = new boost::thread_group;
-                if(s_pMinerThreads)
-                {
-                     s_pMinerThreads->create_thread(boost::bind(&ThreadStakeMinter,pwalletMain));
-                }
-                return "start pos mining";
-            }
-            return "pos is mining";
+            return "start pos mining";
         }
         else
         {
-            if(s_pMinerThreads)
-            {
-                s_pMinerThreads->interrupt_all();
-                s_pMinerThreads->join_all();
-                delete s_pMinerThreads;
-                s_pMinerThreads = nullptr;
-                return "sstop pos mining";
-            }
-           return "no mining";
+           return "stop pos mining";
         }
     }
     return Value::null;
