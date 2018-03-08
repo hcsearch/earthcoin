@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = earthcoin-qt
 macx:TARGET = "EarthCoin-Qt"
-VERSION = 1.5.3
+VERSION = 1.6.0
 INCLUDEPATH += src src/json src/qt
 QT += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -64,6 +64,7 @@ contains(USE_QRCODE, 1) {
 #  or: qmake "USE_UPNP=0" (disabled by default)
 #  or: qmake "USE_UPNP=-" (not supported)
 # miniupnpc (http://miniupnp.free.fr/files/) must be installed for support
+USE_UPNP=-
 contains(USE_UPNP, -) {
     message(Building without UPNP support)
 } else {
@@ -71,6 +72,7 @@ contains(USE_UPNP, -) {
     count(USE_UPNP, 0) {
         USE_UPNP=1
     }
+
     DEFINES += USE_UPNP=$$USE_UPNP STATICLIB
     INCLUDEPATH += $$MINIUPNPC_INCLUDE_PATH
     LIBS += $$join(MINIUPNPC_LIB_PATH,,-L,) -lminiupnpc
@@ -443,3 +445,33 @@ contains(RELEASE, 1) {
 }
 
 system($$QMAKE_LRELEASE -silent $$TRANSLATIONS)
+
+macx: LIBS += -L$$PWD/../../../../../usr/local/Cellar/boost@1.59/1.59.0/lib/ -lboost_atomic-mt
+
+INCLUDEPATH += $$PWD/../../../../../usr/local/Cellar/boost@1.59/1.59.0/include
+DEPENDPATH += $$PWD/../../../../../usr/local/Cellar/boost@1.59/1.59.0/include
+
+macx: PRE_TARGETDEPS += $$PWD/../../../../../usr/local/Cellar/boost@1.59/1.59.0/lib/libboost_atomic-mt.a
+
+macx: LIBS += -L$$PWD/../../../../../usr/local/Cellar/openssl/1.0.2n/lib/ -lcrypto
+
+INCLUDEPATH += $$PWD/../../../../../usr/local/Cellar/openssl/1.0.2n/include
+DEPENDPATH += $$PWD/../../../../../usr/local/Cellar/openssl/1.0.2n/include
+
+macx: PRE_TARGETDEPS += $$PWD/../../../../../usr/local/Cellar/openssl/1.0.2n/lib/libcrypto.a
+
+macx: LIBS += -L$$PWD/../../../../../usr/local/Cellar/miniupnpc/2.0.20180203/lib/ -lminiupnpc
+
+INCLUDEPATH += $$PWD/../../../../../usr/local/Cellar/miniupnpc/2.0.20180203/include
+DEPENDPATH += $$PWD/../../../../../usr/local/Cellar/miniupnpc/2.0.20180203/include
+
+macx: PRE_TARGETDEPS += $$PWD/../../../../../usr/local/Cellar/miniupnpc/2.0.20180203/lib/libminiupnpc.a
+
+
+
+macx: LIBS += -L$$PWD/../../../../../usr/local/Cellar/berkeley-db@4/4.8.30/lib/ -ldb_cxx-4.8
+
+INCLUDEPATH += $$PWD/../../../../../usr/local/Cellar/berkeley-db@4/4.8.30/include
+DEPENDPATH += $$PWD/../../../../../usr/local/Cellar/berkeley-db@4/4.8.30/include
+
+macx: PRE_TARGETDEPS += $$PWD/../../../../../usr/local/Cellar/berkeley-db@4/4.8.30/lib/libdb_cxx-4.8.a

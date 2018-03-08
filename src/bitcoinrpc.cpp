@@ -244,6 +244,7 @@ static const CRPCCommand vRPCCommands[] =
     { "verifymessage",          &verifymessage,          false,     false,      false },
     { "getwork",                &getwork,                true,      false,      true },
     { "getworkex",              &getworkex,              true,      false,      true },
+    { "genstake",               &genstake,               true,      false,      true },
     { "listaccounts",           &listaccounts,           false,     false,      true },
     { "settxfee",               &settxfee,               false,     false,      true },
     { "getblocktemplate",       &getblocktemplate,       true,      false,      false },
@@ -353,7 +354,7 @@ static string HTTPReply(int nStatus, const string& strMsg, bool keepalive)
             "HTTP/1.1 %d %s\r\n"
             "Date: %s\r\n"
             "Connection: %s\r\n"
-            "Content-Length: %"PRIszu"\r\n"
+            "Content-Length: %" PRIszu"\r\n"
             "Content-Type: application/json\r\n"
             "Server: earthcoin-json-rpc/%s\r\n"
             "\r\n"
@@ -1177,7 +1178,7 @@ Array RPCConvertValues(const std::string &strMethod, const std::vector<std::stri
     if (strMethod == "importprivkey"          && n > 2) ConvertTo<bool>(params[2]);
     if (strMethod == "verifychain"            && n > 0) ConvertTo<boost::int64_t>(params[0]);
     if (strMethod == "verifychain"            && n > 1) ConvertTo<boost::int64_t>(params[1]);
-
+    if (strMethod == "genstake"               && n > 0) ConvertTo<bool>(params[0]);
     return params;
 }
 
