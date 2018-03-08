@@ -38,7 +38,7 @@ void CPosMiner::GenerateBitcoins(bool fGenerate, CWallet* pwallet)
 {
     if(fGenerate && pwallet)
     {
-       m_pPosMinerThreads->create_thread(boost::bind(&ThreadStakeMinter,pwallet));
+        m_pPosMinerThreads->create_thread(boost::bind(&ThreadStakeMinter,pwallet));
     }
     else
     {

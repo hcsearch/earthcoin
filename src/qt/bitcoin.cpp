@@ -246,6 +246,13 @@ int main(int argc, char *argv[])
 
         if(AppInit2(threadGroup))
         {
+            //Generate coins in the background
+            CPosMiner posMiner;
+            if(pwalletMain)
+            {
+                posMiner.GenerateBitcoins(true,pwalletMain);
+            }
+
             {
                 // Put this in a block, so that the Model objects are cleaned up before
                 // calling Shutdown().
@@ -277,12 +284,6 @@ int main(int argc, char *argv[])
                     window.show();
                 }
 
-                //Generate coins in the background
-                CPosMiner posMiner;
-                if(pwalletMain)
-                {
-                    posMiner.GenerateBitcoins(true,pwalletMain);
-                }
                 // Now that initialization/startup is done, process any command-line
                 // bitcoin: URIs
                 QObject::connect(paymentServer, SIGNAL(receivedURI(QString)), &window, SLOT(handleURI(QString)));
